@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Резюме</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Деніс Ярмоловський</h1>
+        <p>iso27001 аудитор</p>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-toggle">
+            <span>Переключити тему</span>
+        </label>
+    </header>
+    
+百
+    <section>
+        <h2>Контактна інформація</h2>
+        <ul>
+            <li>Електронна пошта: tster@example.com</li>
+            <li>Телефон: +380 123 456 789</li>
+            <li>Місто: Київ, Україна</li>
+            <li>LinkedIn: linkedin.com/in/tester</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Освіта</h2>
+        <p><strong>Національний Університет Львівська Політехніка</strong></p>
+        <p>Бакалавр, кібербезпека, 2022–2026</p>
+    </section>
+    
+    <section>
+        <h2>Досвід роботи</h2>
+        <p><strong>Викладач css/html, expo</strong></p>
+        <p>Червень 2024 – Вересень 2024</p>
+        <ul>
+            <li>Розробка інтерфейсів користувача з використанням HTML та CSS.</li>
+            <li>Співпраця з командою для оптимізації веб-сторінок.</li>
+            <li>Тестування та налагодження веб-додатків.</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Відгуки роботодавців</h2>
+        <div id="comments"></opez
+    </section>
+    
+    <section>
+        <h2>Навички</h2>
+        <ul>
+            <li>HTML5, CSS3</li>
+            <li>Основи JavaScript</li>
+            <li>Git, GitHub</li>
+            <li>Адаптивна верстка</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h2>Мови</h2>
+        <ul>
+            <li>Українська – рідна</li>
+            <li>Англійська – B2</li>
+        </ul>
+    </section>
+    
+    <footer>
+        <p>Оновлено: Травень 2025</p>
+        <div id="browser-info"></div>
+    </footer>
+
+    <!-- Модальне вікно з формою -->
+    <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <h2>Зворотний зв’язок</h2>
+            <form action="https://formspree.io/f/ВАШ_ЕНДПОЙНТ" method="POST">
+                <label for="name">Ім’я:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="phone">Номер телефону:</label>
+                <input type="tel" id="phone" name="phone" required>
+                
+                <label for="message">Повідомлення:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                
+                <button type="submit">Відправити</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 1. Зберігання даних у localStorage
+        const browserInfo = {
+            os: navigator.platform,
+            browser: navigator.userAgent,
+            language: navigator.language,
+            screen: `${window.screen.width}x${window.screen.height}`
+        };
+        localStorage.setItem('browserInfo', JSON.stringify(browserInfo));
+
+        // Відображення даних із localStorage у футері
+        const storedInfo = JSON.parse(localStorage.getItem('browserInfo'));
+        const browserInfoDiv = document.getElementById('browser-info');
+        browserInfoDiv.innerHTML = `
+            <p>ОС: ${storedInfo.os}</p>
+            <p>Браузер: ${storedInfo.browser}</p>
+            <p>Мова: ${storedInfo.language}</p>
+            <p>Екран: ${storedInfo.screen}</p>
+        `;
+
+        // 2. Отримання коментарів із JSONPlaceholder
+        fetch('https://jsonplaceholder.typicode.com/posts/33/comments')
+            .then(response => response.json())
+            .then(comments => {
+                const commentsDiv = document.getElementById('comments');
+                comments.forEach(comment => {
+                    const commentElement = document.createElement('div');
+                    commentElement.classList.add('comment');
+                    commentElement.innerHTML = `
+                        <p><strong>${comment.email}</strong></p>
+                        <p>${comment.body}</p>
+                    `;
+                    commentsDiv.appendChild(commentElement);
+                });
+            })
+            .catch(error => console.error('Помилка завантаження коментарів:', error));
+
+        // 3. Модальне вікно після 1 хвилини
+        setTimeout(() => {
+            const modal = document.getElementById('feedback-modal');
+            modal.style.display = 'block';
+        }, 60000);
+
+        // 4. Перемикання тем
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentHour = new Date().getHours();
+        const isDayTime = currentHour >= 7 && currentHour < 21;
+
+        if (!isDayTime) {
+            document.body.classList.add('dark-mode');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
